@@ -2,13 +2,19 @@
   "name": "yanyaoer-plugins",
   "owner": {
     "name": "yanyaoer",
-    "url": "https://github.com/yanyaoer"
+    "email": "yanyaoer@gmail.com"
+  },
+  "metadata": {
+    "description": "yanyaoer's Claude Code plugins",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "research-devflow",
-      "source": ".",
-      "description": "拆解复杂任务为可并行执行的子任务，支持 Git Worktree 隔离开发"
+      "source": "./",
+      "description": "拆解复杂任务为可并行执行的子任务，支持 Git Worktree 隔离开发",
+      "category": "workflow",
+      "tags": ["research", "parallel", "worktree", "devflow"]
     }
   ]
 }
