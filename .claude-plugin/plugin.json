@@ -2,7 +2,9 @@
   "name": "research-devflow",
   "version": "1.0.0",
   "description": "拆解复杂任务为可并行执行的子任务，支持 Git Worktree 隔离开发",
-  "author": "yanyaoer",
+  "author": {
+    "name": "yanyaoer"
+  },
   "keywords": ["research", "parallel", "task", "worktree", "devflow"],
   "repository": "https://github.com/yanyaoer/research-devflow"
 }
