@@ -6,12 +6,12 @@
 
 ```bash
 # 创建 worktrees 目录
-mkdir -p .claude/shared_files/<task>/worktrees
+mkdir -p .claude/shared_files/<yymmdd-task-slug>/worktrees
 
 # 为每个并行任务创建独立 worktree
-git worktree add .claude/shared_files/<task>/worktrees/p0 -b research/<task>/p0
-git worktree add .claude/shared_files/<task>/worktrees/p1 -b research/<task>/p1
-git worktree add .claude/shared_files/<task>/worktrees/p2 -b research/<task>/p2
+git worktree add .claude/shared_files/<yymmdd-task-slug>/worktrees/p0 -b research/<yymmdd-task-slug>/p0
+git worktree add .claude/shared_files/<yymmdd-task-slug>/worktrees/p1 -b research/<yymmdd-task-slug>/p1
+git worktree add .claude/shared_files/<yymmdd-task-slug>/worktrees/p2 -b research/<yymmdd-task-slug>/p2
 ```
 
 ## 模式选择流程
@@ -40,7 +40,7 @@ git worktree add .claude/shared_files/<task>/worktrees/p2 -b research/<task>/p2
 Task(
   description = "执行 P0 任务",
   prompt = "
-1. cd .claude/shared_files/<task>/worktrees/p0
+1. cd .claude/shared_files/<yymmdd-task-slug>/worktrees/p0
 2. 阅读 ../context-common.md 和 ../context-p0-xxx.md
 3. 在当前 worktree 目录完成开发
 4. git add -A && git commit -m 'feat: ...'
@@ -54,7 +54,7 @@ Task(
 Task(
   description = "执行 P1 任务",
   prompt = "
-1. cd .claude/shared_files/<task>/worktrees/p1
+1. cd .claude/shared_files/<yymmdd-task-slug>/worktrees/p1
 2. 阅读 ../context-common.md 和 ../context-p1-xxx.md
 3. 在当前 worktree 目录完成开发
 4. git add -A && git commit -m 'feat: ...'
@@ -73,13 +73,13 @@ cd <project_root>
 git checkout main
 
 # 按完成顺序合并（检查 task-status.json 的 completed_at）
-git merge research/<task>/p0 --no-ff
-git merge research/<task>/p1 --no-ff  # 解决冲突如有
-git merge research/<task>/p2 --no-ff  # 解决冲突如有
+git merge research/<yymmdd-task-slug>/p0 --no-ff
+git merge research/<yymmdd-task-slug>/p1 --no-ff  # 解决冲突如有
+git merge research/<yymmdd-task-slug>/p2 --no-ff  # 解决冲突如有
 
 # 清理
-git worktree remove .claude/shared_files/<task>/worktrees/p0
-git worktree remove .claude/shared_files/<task>/worktrees/p1
+git worktree remove .claude/shared_files/<yymmdd-task-slug>/worktrees/p0
+git worktree remove .claude/shared_files/<yymmdd-task-slug>/worktrees/p1
 ```
 
 **特点**:
@@ -148,7 +148,7 @@ Task(
 # 终端 1 - P0 (在 worktree 中开发)
 cd <project_dir>
 claude "
-1. cd .claude/shared_files/<task>/worktrees/p0
+1. cd .claude/shared_files/<yymmdd-task-slug>/worktrees/p0
 2. 阅读上级目录的 context-common.md 和 context-p0-xxx.md
 3. 在当前 worktree 完成所有开发
 4. git add -A && git commit -m 'feat: ...'
@@ -158,7 +158,7 @@ claude "
 
 # 终端 2 - P1 (在 worktree 中开发)
 claude "
-1. cd .claude/shared_files/<task>/worktrees/p1
+1. cd .claude/shared_files/<yymmdd-task-slug>/worktrees/p1
 2. 阅读上级目录的 context-common.md 和 context-p1-xxx.md
 3. 在当前 worktree 完成所有开发
 4. git add -A && git commit -m 'feat: ...'
@@ -171,8 +171,8 @@ claude "
 ```bash
 cd <project_dir>
 git checkout main
-git merge research/<task>/p0 --no-ff
-git merge research/<task>/p1 --no-ff  # 谨慎解决冲突
+git merge research/<yymmdd-task-slug>/p0 --no-ff
+git merge research/<yymmdd-task-slug>/p1 --no-ff  # 谨慎解决冲突
 ```
 
 **特点**:
@@ -228,12 +228,12 @@ osascript -e 'display notification "所有任务已完成！" with title "Resear
 
 **检查任务状态**:
 ```bash
-cat .claude/shared_files/<task>/task-status.json | jq '.tasks[] | {id, name, status}'
+cat .claude/shared_files/<yymmdd-task-slug>/task-status.json | jq '.tasks[] | {id, name, status}'
 ```
 
 **统计完成情况**:
 ```bash
-cat .claude/shared_files/<task>/task-status.json | jq '[.tasks[] | select(.status == "completed")] | length'
+cat .claude/shared_files/<yymmdd-task-slug>/task-status.json | jq '[.tasks[] | select(.status == "completed")] | length'
 ```
 
 ---

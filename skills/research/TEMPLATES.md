@@ -3,6 +3,11 @@
 ## context-common.md 模板
 
 ```markdown
+---
+# context-common.md 不需要完整 meta，仅标识关联的 task
+task_id: "yymmdd-task-slug"
+---
+
 # <任务名称> - 共享上下文
 
 ## 项目背景
@@ -30,6 +35,20 @@ project/
 | 项目 | 方案 | 核心技术 |
 |------|------|----------|
 | xxx | yyy | zzz |
+
+## 相关 Postmortem
+
+以下历史问题与本任务相关，请在开发过程中注意：
+
+### 高相关（必读）
+
+_检索命令: `rg "modules:.*<涉及模块>" .claude/postmortem/`_
+
+- 无 / [报告链接](路径) - 简要说明
+
+### 参考
+
+- 无 / [报告链接](路径) - 关键词匹配
 
 ## 构建命令
 
@@ -171,9 +190,33 @@ fun testExample() {
 
 ```json
 {
+  "meta": {
+    "type": "task",
+    "id": "yymmdd-task-slug",
+    "created_at": "2025-01-13",
+    "updated_at": "2025-01-13",
+    "status": "active",
+    "author": "username",
+    "scope": {
+      "modules": [],
+      "functions": [],
+      "files": []
+    },
+    "keywords": [],
+    "relevance": {
+      "must_read": [],
+      "consider": [],
+      "skip_if": []
+    },
+    "refs": {
+      "jira": "",
+      "commits": [],
+      "related": []
+    }
+  },
   "task_name": "任务名称",
-  "task_slug": "task-slug",
-  "created_at": "2025-01-12",
+  "task_slug": "yymmdd-task-slug",
+  "created_at": "2025-01-13",
   "base_branch": "main",
   "worktree_enabled": true,
   "merge_order": [],
@@ -184,7 +227,7 @@ fun testExample() {
       "status": "pending",
       "dependencies": [],
       "context_file": "context-p0-xxx.md",
-      "branch": "research/task-slug/p0",
+      "branch": "research/yymmdd-task-slug/p0",
       "worktree_path": "worktrees/p0",
       "merge_status": "pending",
       "completed_at": null,
@@ -197,7 +240,7 @@ fun testExample() {
       "status": "pending",
       "dependencies": [],
       "context_file": "context-p1-yyy.md",
-      "branch": "research/task-slug/p1",
+      "branch": "research/yymmdd-task-slug/p1",
       "worktree_path": "worktrees/p1",
       "merge_status": "pending",
       "completed_at": null,
@@ -210,7 +253,7 @@ fun testExample() {
       "status": "pending",
       "dependencies": ["p0"],
       "context_file": "context-p2-zzz.md",
-      "branch": "research/task-slug/p2",
+      "branch": "research/yymmdd-task-slug/p2",
       "worktree_path": "worktrees/p2",
       "merge_status": "pending",
       "completed_at": null,
@@ -225,6 +268,7 @@ fun testExample() {
 
 | 字段 | 说明 |
 |------|------|
+| `meta` | 统一 meta schema，用于 AI 检索 |
 | `base_branch` | 基础分支，合并目标 |
 | `worktree_enabled` | 是否启用 worktree 隔离 |
 | `merge_order` | 合并顺序记录 `["p0", "p1", ...]` |
@@ -239,9 +283,10 @@ fun testExample() {
 
 ### task-slug
 
-- 使用 kebab-case
+- 格式: `yymmdd-kebab-case-description`
+- 前缀为创建日期
 - 描述性但简洁
-- 示例: `optimize-long-sentence`, `add-dark-mode`, `fix-memory-leak`
+- 示例: `250113-optimize-long-sentence`, `250113-add-dark-mode`, `250112-fix-memory-leak`
 
 ### context 文件名
 

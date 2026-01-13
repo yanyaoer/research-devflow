@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "type": "task",
+    "id": "250113-phase1-core-skills",
+    "created_at": "2025-01-13",
+    "updated_at": "2025-01-13",
+    "status": "active",
+    "author": "yanyao",
+    "scope": {
+      "modules": [
+        "docs/",
+        "skills/",
+        "scripts/"
+      ],
+      "functions": [],
+      "files": [
+        "docs/RULES-*.md",
+        "scripts/rule_query.py",
+        "skills/review/"
+      ]
+    },
+    "keywords": [
+      "review",
+      "postmortem",
+      "rules",
+      "code-quality"
+    ],
+    "relevance": {
+      "must_read": [
+        "修改代码审查流程",
+        "添加新的检查规则"
+      ],
+      "consider": [
+        "修改 postmortem 流程"
+      ],
+      "skip_if": [
+        "仅修改 research/refactor"
+      ]
+    },
+    "refs": {
+      "jira": "",
+      "commits": [],
+      "related": [
+        "250113-phase0-meta-schema"
+      ]
+    }
+  },
+  "task_name": "Phase 1: 开发核心流程 Skills - Review",
+  "task_slug": "250113-phase1-core-skills",
+  "created_at": "2025-01-13",
+  "base_branch": "main",
+  "worktree_enabled": false,
+  "merge_order": [],
+  "tasks": [
+    {
+      "id": "p0",
+      "name": "创建共享规则文件 RULES-CODE-QUALITY.md",
+      "status": "completed",
+      "dependencies": [],
+      "context_file": "context-p0-shared-rules.md",
+      "completed_at": "2025-01-13",
+      "notes": "创建 15 条规则，覆盖安全/健壮性/性能/可维护性"
+    },
+    {
+      "id": "p1",
+      "name": "创建 rule_query.py 查询脚本",
+      "status": "completed",
+      "dependencies": [
+        "p0"
+      ],
+      "context_file": "context-p1-rule-query.md",
+      "completed_at": "2025-01-13",
+      "notes": "支持 table/json/markdown 输出，按 scenario 和 category 过滤"
+    },
+    {
+      "id": "p2",
+      "name": "创建 review skill",
+      "status": "completed",
+      "dependencies": [
+        "p1"
+      ],
+      "context_file": "context-p2-review-skill.md",
+      "completed_at": "2025-01-13",
+      "notes": "支持 staged/commit/branch/pr 多种输入，集成规则检查和 postmortem 检索"
+    },
+    {
+      "id": "p3",
+      "name": "更新 postmortem 引用共享规则",
+      "status": "completed",
+      "dependencies": [
+        "p2"
+      ],
+      "context_file": "context-p3-postmortem-update.md",
+      "completed_at": "2025-01-13",
+      "notes": "添加共享规则引用、规则匹配分析步骤、matched_rules 和 related_reviews 字段"
+    }
+  ]
+}

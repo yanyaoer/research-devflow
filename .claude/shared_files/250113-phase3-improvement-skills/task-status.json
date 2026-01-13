@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "type": "task",
+    "id": "250113-phase3-improvement-skills",
+    "created_at": "2025-01-13",
+    "updated_at": "2025-01-13",
+    "status": "active",
+    "author": "yanyao",
+    "scope": {
+      "modules": ["skills/", "commands/"],
+      "functions": [],
+      "files": ["skills/dependency/", "skills/release/", "skills/onboarding/"]
+    },
+    "keywords": ["dependency", "release", "onboarding", "improvement"],
+    "relevance": {
+      "must_read": ["添加持续改进工具"],
+      "consider": ["修改发布流程"],
+      "skip_if": ["仅修改 review/postmortem"]
+    },
+    "refs": {
+      "jira": "",
+      "commits": [],
+      "related": ["250113-phase2-quality-skills"]
+    }
+  },
+  "task_name": "Phase 3: 持续改进 Skills",
+  "task_slug": "250113-phase3-improvement-skills",
+  "created_at": "2025-01-13",
+  "base_branch": "main",
+  "worktree_enabled": false,
+  "merge_order": [],
+  "tasks": [
+    {
+      "id": "p0",
+      "name": "创建 dependency skill",
+      "status": "completed",
+      "dependencies": [],
+      "context_file": "context-p0-dependency.md",
+      "completed_at": "2025-01-13",
+      "notes": "支持多包管理器，安全漏洞检查，升级影响分析"
+    },
+    {
+      "id": "p1",
+      "name": "创建 release skill",
+      "status": "completed",
+      "dependencies": ["p0"],
+      "context_file": "context-p1-release.md",
+      "completed_at": "2025-01-13",
+      "notes": "生成 changelog，发布说明，聚合 postmortem/ADR"
+    },
+    {
+      "id": "p2",
+      "name": "创建 onboarding skill",
+      "status": "completed",
+      "dependencies": ["p1"],
+      "context_file": "context-p2-onboarding.md",
+      "completed_at": "2025-01-13",
+      "notes": "项目结构分析，聚合文档，提取常见问题"
+    }
+  ]
+}

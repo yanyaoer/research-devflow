@@ -1,0 +1,51 @@
+{
+  "task_name": "Phase 0: 基础设施 - 统一 Meta Schema",
+  "task_slug": "250113-phase0-meta-schema",
+  "created_at": "2025-01-13",
+  "base_branch": "main",
+  "worktree_enabled": false,
+  "merge_order": [],
+  "tasks": [
+    {
+      "id": "p0",
+      "name": "统一 postmortem 报告模板的 meta 格式",
+      "status": "completed",
+      "dependencies": [],
+      "context_file": "context-p0-postmortem-meta.md",
+      "completed_at": "2025-01-13",
+      "notes": "更新 REPORT.md 模板为统一 schema 格式"
+    },
+    {
+      "id": "p1",
+      "name": "统一 research task-status.json 的 meta 格式",
+      "status": "completed",
+      "dependencies": [],
+      "context_file": "context-p1-research-meta.md",
+      "completed_at": "2025-01-13",
+      "notes": "更新 task-status.json 和 context-common.md 模板"
+    },
+    {
+      "id": "p2",
+      "name": "创建 META-SCHEMA.md 文档",
+      "status": "completed",
+      "dependencies": [
+        "p0",
+        "p1"
+      ],
+      "context_file": "context-p2-schema-doc.md",
+      "completed_at": "2025-01-13",
+      "notes": "创建 docs/META-SCHEMA.md 规范文档"
+    },
+    {
+      "id": "p3",
+      "name": "添加检索命令示例到各 skill",
+      "status": "completed",
+      "dependencies": [
+        "p2"
+      ],
+      "context_file": "context-p3-search-examples.md",
+      "completed_at": "2025-01-13",
+      "notes": "添加检索命令到 research 和 postmortem skill"
+    }
+  ]
+}

@@ -15,7 +15,7 @@
 
 **Step 1: 创建 worktrees 目录**
 ```bash
-mkdir -p .claude/shared_files/<task-slug>/worktrees
+mkdir -p .claude/shared_files/<yymmdd-task-slug>/worktrees
 ```
 
 **Step 2: 为每个并行任务创建 worktree**
@@ -24,10 +24,10 @@ mkdir -p .claude/shared_files/<task-slug>/worktrees
 BASE_BRANCH=$(git branch --show-current)
 
 # 创建 P0 的 worktree
-git worktree add .claude/shared_files/<task-slug>/worktrees/p0 -b research/<task-slug>/p0
+git worktree add .claude/shared_files/<yymmdd-task-slug>/worktrees/p0 -b research/<yymmdd-task-slug>/p0
 
 # 创建 P1 的 worktree
-git worktree add .claude/shared_files/<task-slug>/worktrees/p1 -b research/<task-slug>/p1
+git worktree add .claude/shared_files/<yymmdd-task-slug>/worktrees/p1 -b research/<yymmdd-task-slug>/p1
 
 # 创建更多...
 ```
@@ -57,7 +57,7 @@ git worktree add .claude/shared_files/<task-slug>/worktrees/p1 -b research/<task
 
 1. **切换到自己的 worktree 目录**
    ```bash
-   cd .claude/shared_files/<task>/worktrees/p0
+   cd .claude/shared_files/<yymmdd-task-slug>/worktrees/p0
    ```
 
 2. **在 worktree 中完成所有开发**
@@ -90,10 +90,10 @@ cd <project_root>
 git checkout main
 
 # 合并第一个完成的任务（通常无冲突）
-git merge research/<task>/p0 --no-ff -m "merge: P0 - <任务名>"
+git merge research/<yymmdd-task-slug>/p0 --no-ff -m "merge: P0 - <任务名>"
 
 # 合并第二个任务（可能有冲突）
-git merge research/<task>/p1 --no-ff -m "merge: P1 - <任务名>"
+git merge research/<yymmdd-task-slug>/p1 --no-ff -m "merge: P1 - <任务名>"
 # 如有冲突：
 #   1. 仔细检查冲突文件
 #   2. 保留两个任务的功能
@@ -109,7 +109,7 @@ git merge research/<task>/p1 --no-ff -m "merge: P1 - <任务名>"
 
 **Step 1: 识别冲突**
 ```bash
-git merge research/<task>/p1
+git merge research/<yymmdd-task-slug>/p1
 # Auto-merging src/file.kt
 # CONFLICT (content): Merge conflict in src/file.kt
 ```
@@ -160,12 +160,12 @@ git commit -m "merge: resolve conflicts between P0 and P1"
 
 ```bash
 # 删除 worktree
-git worktree remove .claude/shared_files/<task>/worktrees/p0
-git worktree remove .claude/shared_files/<task>/worktrees/p1
+git worktree remove .claude/shared_files/<yymmdd-task-slug>/worktrees/p0
+git worktree remove .claude/shared_files/<yymmdd-task-slug>/worktrees/p1
 
 # 删除分支（可选）
-git branch -d research/<task>/p0
-git branch -d research/<task>/p1
+git branch -d research/<yymmdd-task-slug>/p0
+git branch -d research/<yymmdd-task-slug>/p1
 
 # 发送全部完成通知
 osascript -e 'display notification "所有任务已完成并合并！" with title "Research Complete" sound name "Hero"'
@@ -192,7 +192,7 @@ osascript -e 'display notification "所有任务已完成并合并！" with titl
 **目录命名规范**: 使用 kebab-case，如 `optimize-long-sentence-input`
 
 ```bash
-mkdir -p .claude/shared_files/<task-slug>
+mkdir -p .claude/shared_files/<yymmdd-task-slug>
 ```
 
 ### Step 3: 写入文件
@@ -336,8 +336,8 @@ ls .claude/shared_files/*/task-status.json 2>/dev/null
 
 ```
 请先阅读:
-1. .claude/shared_files/<task>/context-common.md
-2. .claude/shared_files/<task>/context-pX-xxx.md
+1. .claude/shared_files/<yymmdd-task-slug>/context-common.md
+2. .claude/shared_files/<yymmdd-task-slug>/context-pX-xxx.md
 ```
 
 ### 2. 检查依赖

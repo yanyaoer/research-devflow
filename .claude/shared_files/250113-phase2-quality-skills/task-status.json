@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "type": "task",
+    "id": "250113-phase2-quality-skills",
+    "created_at": "2025-01-13",
+    "updated_at": "2025-01-13",
+    "status": "active",
+    "author": "yanyao",
+    "scope": {
+      "modules": [
+        "skills/",
+        "commands/"
+      ],
+      "functions": [],
+      "files": [
+        "skills/tech-debt/",
+        "skills/test-strategy/",
+        "skills/security-scan/"
+      ]
+    },
+    "keywords": [
+      "tech-debt",
+      "test-strategy",
+      "security-scan",
+      "quality"
+    ],
+    "relevance": {
+      "must_read": [
+        "添加质量保障工具"
+      ],
+      "consider": [
+        "修改测试流程"
+      ],
+      "skip_if": [
+        "仅修改 review/postmortem"
+      ]
+    },
+    "refs": {
+      "jira": "",
+      "commits": [],
+      "related": [
+        "250113-phase1-core-skills"
+      ]
+    }
+  },
+  "task_name": "Phase 2: 质量保障 Skills",
+  "task_slug": "250113-phase2-quality-skills",
+  "created_at": "2025-01-13",
+  "base_branch": "main",
+  "worktree_enabled": false,
+  "merge_order": [],
+  "tasks": [
+    {
+      "id": "p0",
+      "name": "创建 tech-debt skill",
+      "status": "completed",
+      "dependencies": [],
+      "context_file": "context-p0-tech-debt.md",
+      "completed_at": "2025-01-13",
+      "notes": "支持扫描 TODO/FIXME/HACK/XXX，手动添加债务，生成报告"
+    },
+    {
+      "id": "p1",
+      "name": "创建 test-strategy skill",
+      "status": "completed",
+      "dependencies": ["p0"],
+      "context_file": "context-p1-test-strategy.md",
+      "completed_at": "2025-01-13",
+      "notes": "检索 postmortem 复现步骤，分析测试覆盖，识别测试缺口"
+    },
+    {
+      "id": "p2",
+      "name": "创建 security-scan skill",
+      "status": "completed",
+      "dependencies": ["p1"],
+      "context_file": "context-p2-security-scan.md",
+      "completed_at": "2025-01-13",
+      "notes": "复用 RULES-CODE-QUALITY.md 安全规则，检索安全类 postmortem"
+    }
+  ]
+}
