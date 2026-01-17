@@ -209,7 +209,7 @@ ast-grep -p 'validateToken($$$)' --lang typescript
 /adr search <keyword>    # 搜索相关决策
 ```
 
-**输出目录**: `.claude/adr/<yymmdd-decision-title>/`
+**输出目录**: `<project-root>/.claude/adr/<yymmdd-decision-title>/`
 
 **触发检索**: 创建新 ADR 时检索相关历史决策
 
@@ -273,7 +273,7 @@ git log --oneline -p -S "$FUNC" -- '*.ts'
 rg "TODO|FIXME|HACK|XXX" --type-add 'code:*.{ts,js,py,go,rs,kt,java}' -t code
 ```
 
-**输出目录**: `.claude/tech-debt/`
+**输出目录**: `<project-root>/.claude/tech-debt/`
 
 #### P2.2 Test-Strategy (测试策略)
 - [ ] 创建 `skills/test-strategy/SKILL.md`

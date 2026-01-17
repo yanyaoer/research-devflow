@@ -13,17 +13,14 @@ LSP (Language Server Protocol) 提供语义级代码理解能力，在代码审�
 - **引用查找**: 快速评估变更影响范围。
 - **类型信息**: 明确变量与函数签名。
 
-## 1. 环境检查
+## 1. 使用方式
 
-使用以下命令检查 LSP Plugin 状态：
+**直接调用 LSP 工具**，无需预先检查配置：
+- 调用 `definition`、`references`、`hover` 等 LSP 操作
+- 如调用成功，继续使用 LSP 进行分析
+- 如调用失败，自动降级到 `ast-grep` 或 `rg`
 
-```bash
-# 检查配置文件中是否启用了 LSP 插件
-grep -E "gopls-lsp|pyright-lsp|typescript-lsp|rust-analyzer-lsp|mcp-java" .claude/settings.json .claude/settings.local.json 2>/dev/null
-```
-
-- **已启用**: 尝试 `/list-tools` 确认工具可用。
-- **未启用**: 请参考 [README 安装指南](../README.md#claude-code-extra-configuration) 进行安装配置。
+**安装 LSP Plugin** (如需)：请参考 [README 安装指南](../README.md#claude-code-extra-configuration)。
 
 ## 2. Java (jdtls) 配置详解
 

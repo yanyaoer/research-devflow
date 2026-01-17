@@ -10,6 +10,6 @@ argument-hint: "[jira-id | --select]"
 - --select: 手动从最近的 commit 列表中选择
 - <jira-id>: 通过 Jira ID 获取关联 commit 进行分析
 
-报告输出到 `.claude/postmortem/<yymmdd-issue-short-description>/` 目录。
+报告输出到 `<project-root>/.claude/postmortem/<yymmdd-issue-short-description>/` 目录。
 
 请调用 postmortem skill 来处理用户请求。

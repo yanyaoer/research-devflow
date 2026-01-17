@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 *   **规范文档 (`docs/`)**:
     *   `META-SCHEMA.md`: **元数据标准**。所有 AI 生成文档必须严格遵守此 Schema，以支持语义检索。
     *   `RULES-CODE-QUALITY.md`: **代码质量规则库**。包含可执行的 CLI 检查命令（`rg`, `ast-grep`）。
-*   **资产存储 (`.claude/`)**: 所有知识资产（复盘报告、审查记录等）均以 Markdown/JSON 形式本地存储于目标项目的 `.claude/` 目录下。
+*   **资产存储 (`<project-root>/.claude/`)**: 所有知识资产（复盘报告、审查记录等）均以 Markdown/JSON 形式本地存储于目标项目的 `<project-root>/.claude/` 目录下。
 
 ## 设计原则与约束
 

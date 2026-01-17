@@ -192,7 +192,7 @@ db.query('SELECT * FROM users WHERE id = ?', [userId])
 ## 输出位置
 
 ```
-.claude/security-scan/
+<project-root>/.claude/security-scan/
 ├── <yymmdd>-scan/
 │   └── REPORT.md      # 安全扫描报告
 ```

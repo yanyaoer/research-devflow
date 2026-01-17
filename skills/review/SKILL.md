@@ -214,8 +214,8 @@ issues_count: 3
 
 ## 输出位置
 
-审查报告输出到：`.claude/reviews/<yymmdd>-review-<target>/REPORT.md`
+审查报告输出到：`<project-root>/.claude/reviews/<yymmdd>-review-<target>/REPORT.md`
 
 例如：
-- `.claude/reviews/250113-review-pr-123/REPORT.md`
-- `.claude/reviews/250113-review-feature-auth/REPORT.md`
+- `<project-root>/.claude/reviews/250113-review-pr-123/REPORT.md`
+- `<project-root>/.claude/reviews/250113-review-feature-auth/REPORT.md`

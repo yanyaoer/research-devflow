@@ -21,8 +21,8 @@
 
 ## 输出
 
-- 测试策略: `.claude/test-strategy/<yymmdd>-<module>/STRATEGY.md`
-- 测试用例: `.claude/test-strategy/<yymmdd>-<module>/test-cases.md`
+- 测试策略: `<project-root>/.claude/test-strategy/<yymmdd>-<module>/STRATEGY.md`
+- 测试用例: `<project-root>/.claude/test-strategy/<yymmdd>-<module>/test-cases.md`
 
 ## 示例
 

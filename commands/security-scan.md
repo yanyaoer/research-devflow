@@ -21,7 +21,7 @@
 
 ## 输出
 
-- 安全报告: `.claude/security-scan/<yymmdd>-scan/REPORT.md`
+- 安全报告: `<project-root>/.claude/security-scan/<yymmdd>-scan/REPORT.md`
 
 ## 示例
 

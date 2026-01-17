@@ -151,7 +151,7 @@ keywords: [dependency, upgrade, security]
 ## 输出位置
 
 ```
-.claude/dependency/
+<project-root>/.claude/dependency/
 ├── REPORT.md           # 依赖分析报告
 └── audit.json          # 详细审计数据
 ```

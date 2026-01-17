@@ -21,7 +21,7 @@
 
 ## 输出
 
-- 依赖报告: `.claude/dependency/REPORT.md`
+- 依赖报告: `<project-root>/.claude/dependency/REPORT.md`
 
 ## 示例
 

@@ -20,8 +20,8 @@
 
 ## 输出
 
-- 项目指南: `.claude/onboarding/GUIDE.md`
-- 模块指南: `.claude/onboarding/<module>/GUIDE.md`
+- 项目指南: `<project-root>/.claude/onboarding/GUIDE.md`
+- 模块指南: `<project-root>/.claude/onboarding/<module>/GUIDE.md`
 
 ## 示例
 

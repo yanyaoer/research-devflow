@@ -17,18 +17,17 @@ description: "分析 bug/fix 相关提交，生成事故复盘报告。使用场
 
 ```
 Task Progress:
-- [ ] 0. 环境与工具检查 (LSP/Linter)
+- [ ] 0. 确认工具使用策略 (LSP > ast-grep > rg)
 - [ ] 1. 解析参数，确定分析模式
 - [ ] 2. 获取待分析的 commit 列表
-- [ ] 3. 检查 jira_issue_analyzer 可用性（如有 Jira ID）
-- [ ] 4. 提取 Jira 信息（如适用）
-- [ ] 5. 分析代码变更（逐行追踪）
-- [ ] 5a. 回溯引入问题的 Commit (Root Cause Backtracking)
-- [ ] 6. 分析函数调用链和影响范围
-- [ ] 7. 进行安全性和健壮性评估
-- [ ] 8. 综合分析生成事故报告 (区分主要/次要原因)
-- [ ] 9. 总结经验教训和改进建议
-- [ ] 10. 写入报告文件
+- [ ] 3. 提取 Jira 信息（如适用，调用 jira_issue_analyzer）
+- [ ] 4. 分析代码变更（逐行追踪）
+- [ ] 4a. 回溯引入问题的 Commit (Root Cause Backtracking)
+- [ ] 5. 分析函数调用链和影响范围
+- [ ] 6. 进行安全性和健壮性评估
+- [ ] 7. 综合分析生成事故报告 (区分主要/次要原因)
+- [ ] 8. 总结经验教训和改进建议
+- [ ] 9. 写入报告文件
 ```
 
 ## 参数解析
@@ -57,16 +56,10 @@ git log --oneline -30
 ### 模式 3: Jira 关联
 
 检查 `jira_issue_analyzer` skill 是否可用：
-```bash
-# 检查 skill 是否存在
-ls ~/.claude/plugins/*/skills/jira_issue_analyzer/SKILL.md 2>/dev/null || \
-ls ./.claude-plugin/../skills/jira_issue_analyzer/SKILL.md 2>/dev/null
-```
+- 直接尝试调用 `jira_issue_analyzer:root-cause <jira-id>`
+- 如调用失败或提示 skill 不存在，跳过 Jira 信息提取步骤
 
-如果可用，调用：
-```
-jira_issue_analyzer:root-cause <jira-id>
-```
+如果可用，调用会返回：
 
 提取信息：
 - Jira 问题描述
@@ -77,10 +70,10 @@ jira_issue_analyzer:root-cause <jira-id>
 
 ## 输出目录
 
-报告写入：`.claude/postmortem/<yymmdd-issue-short-description>/`
+报告写入：`<project-root>/.claude/postmortem/<yymmdd-issue-short-description>/`
 
 ```
-.claude/postmortem/
+<project-root>/.claude/postmortem/
 └── 250113-fix-auth-token-expired/
     ├── REPORT.md           # 主报告
     ├── code-analysis.md    # 代码变更详细分析
@@ -114,17 +107,14 @@ python scripts/rule_query.py --query postmortem --category security --format jso
 
 ## 代码分析流程
 
-### Step 0: 环境与工具检查
+### Step 0: 工具使用策略
 
-**LSP 状态检查**:
+分析代码时，按以下优先级尝试工具（无需预先检查配置）：
+1. **LSP**: 直接调用 `definition`、`references`、`hover`，失败则降级
+2. **ast-grep**: 结构化语法匹配
+3. **rg/grep**: 文本搜索兜底
 
-```bash
-# 检查 settings.json 中是否启用了相关 plugin
-grep -E "gopls-lsp|pyright-lsp|typescript-lsp|rust-analyzer-lsp|mcp-java" .claude/settings.json .claude/settings.local.json 2>/dev/null
-```
-
-- **已启用**: 使用 `/list-tools` 确认工具可用。
-- **未启用**: 请参考 [README 安装指南](../../README.md#claude-code-extra-configuration) 进行安装。
+**安装 LSP Plugin** (如需)：请参考 [README 安装指南](../../README.md#claude-code-extra-configuration)。
 
 ### Step 1: 提取变更信息
 

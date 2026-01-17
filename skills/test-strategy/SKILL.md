@@ -187,7 +187,7 @@ it('should handle concurrent token refresh', async () => {
 ## 输出位置
 
 ```
-.claude/test-strategy/
+<project-root>/.claude/test-strategy/
 ├── <yymmdd>-<module>/
 │   ├── STRATEGY.md      # 测试策略文档
 │   └── test-cases.md    # 生成的测试用例

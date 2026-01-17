@@ -159,7 +159,7 @@ curl /api/v2/users
 ## 输出位置
 
 ```
-.claude/release/
+<project-root>/.claude/release/
 ├── CHANGELOG.md        # 完整 changelog
 └── <version>/
     └── NOTES.md        # 版本发布说明

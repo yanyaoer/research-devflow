@@ -233,7 +233,7 @@ pnpm test
 ## 输出位置
 
 ```
-.claude/onboarding/
+<project-root>/.claude/onboarding/
 ├── GUIDE.md            # 完整上手指南
 └── <module>/
     └── GUIDE.md        # 模块指南

@@ -6,7 +6,7 @@
 
 **执行任何任务前，必须完成以下门禁检查点：**
 
-1. **[GATE-1]** 创建任务目录 `.claude/shared_files/<yymmdd-task-slug>/`
+1. **[GATE-1]** 创建任务目录 `<project-root>/.claude/shared_files/<yymmdd-task-slug>/`
 2. **[GATE-2]** 创建 `task-status.json`
 3. **[GATE-3]** 创建 `context-common.md`
 4. **[GATE-4]** 使用 AskUserQuestion 确认执行方式
@@ -88,10 +88,10 @@ scripts/
 
 ## 输出目录
 
-任务上下文写入：`.claude/shared_files/<yymmdd-task-slug>/`
+任务上下文写入：`<project-root>/.claude/shared_files/<yymmdd-task-slug>/`
 
 ```
-.claude/shared_files/250113-my-task/
+<project-root>/.claude/shared_files/250113-my-task/
 ├── task-status.json      # 任务状态和元信息
 ├── context-common.md     # 共享上下文
 ├── context-p0-xxx.md     # 子任务 P0 上下文

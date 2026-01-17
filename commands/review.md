@@ -22,7 +22,7 @@
 
 ## 输出
 
-- 审查报告: `.claude/reviews/<yymmdd>-review-<target>/REPORT.md`
+- 审查报告: `<project-root>/.claude/reviews/<yymmdd>-review-<target>/REPORT.md`
 - 终端摘要: 风险等级统计和关键问题提示
 
 ## 示例

@@ -19,8 +19,8 @@
 
 ## 输出
 
-- Changelog: `.claude/release/CHANGELOG.md`
-- 发布说明: `.claude/release/<version>/NOTES.md`
+- Changelog: `<project-root>/.claude/release/CHANGELOG.md`
+- 发布说明: `<project-root>/.claude/release/<version>/NOTES.md`
 
 ## 示例
 

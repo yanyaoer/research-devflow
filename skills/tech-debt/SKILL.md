@@ -57,7 +57,7 @@ rg "## 长期改进" -A 10 .claude/postmortem/*/REPORT.md
 
 ### Step 4: 生成报告
 
-输出到：`.claude/tech-debt/REPORT.md`
+输出到：`<project-root>/.claude/tech-debt/REPORT.md`
 
 ## 债务记录格式
 
@@ -147,7 +147,7 @@ keywords: [tech-debt, todo, fixme, hack]
 ## 输出位置
 
 ```
-.claude/tech-debt/
+<project-root>/.claude/tech-debt/
 ├── REPORT.md           # 自动生成的债务报告
 ├── manual.md           # 手动添加的债务记录
 └── history/            # 历史报告存档

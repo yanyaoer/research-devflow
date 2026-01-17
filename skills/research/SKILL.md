@@ -20,7 +20,7 @@ description: "拆解复杂任务为可并行执行的子任务。使用场景：
 
 在执行任何调研任务之前，你 **必须** 完成以下步骤：
 
-1. **[GATE-1] 创建任务目录** - 在 `.claude/shared_files/<yymmdd-task-slug>/` 创建目录
+1. **[GATE-1] 创建任务目录** - 在 `<project-root>/.claude/shared_files/<yymmdd-task-slug>/` 创建目录
 2. **[GATE-2] 创建 task-status.json** - 写入任务元数据和子任务列表
 3. **[GATE-3] 创建 context-common.md** - 写入项目背景和公共上下文
 4. **[GATE-4] 询问用户执行方式** - 使用 AskUserQuestion 确认执行模式
@@ -162,7 +162,7 @@ fd REPORT.md .claude/postmortem/ -x sed -n '/^---$/,/^---$/p' {}
 
 ## 目录结构
 
-创建位置：`.claude/shared_files/<yymmdd-task-slug>/`
+创建位置：`<project-root>/.claude/shared_files/<yymmdd-task-slug>/`
 
 ```
 <yymmdd-task-slug>/

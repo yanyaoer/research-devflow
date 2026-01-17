@@ -20,8 +20,8 @@
 
 ## 输出
 
-- 债务报告: `.claude/tech-debt/REPORT.md`
-- 手动记录: `.claude/tech-debt/manual.md`
+- 债务报告: `<project-root>/.claude/tech-debt/REPORT.md`
+- 手动记录: `<project-root>/.claude/tech-debt/manual.md`
 
 ## 示例
 
