@@ -7,14 +7,53 @@
     python rule_query.py --query postmortem --category security
     python rule_query.py --query review --format json
     python rule_query.py --query review --format markdown
+
+默认加载规则文件:
+    - docs/RULES-*.md (框架内置规则)
+    - <project-root>/.claude/docs/RULES-*.md (项目自定义规则，可选)
 """
 
 import argparse
+import glob
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import List, Dict, Optional
+
+
+def get_project_root() -> Optional[Path]:
+    """获取项目根目录 (通过 git 或当前工作目录)"""
+    try:
+        result = subprocess.run(
+            ['git', 'rev-parse', '--show-toplevel'],
+            capture_output=True, text=True, check=True
+        )
+        return Path(result.stdout.strip())
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return Path.cwd()
+
+
+def discover_rules_files(script_dir: Path) -> List[Path]:
+    """发现所有可用的规则文件"""
+    files = []
+
+    # 1. 框架内置规则: docs/RULES-*.md
+    framework_docs = script_dir.parent / 'docs'
+    if framework_docs.exists():
+        for f in framework_docs.glob('RULES-*.md'):
+            files.append(f)
+
+    # 2. 项目自定义规则: <project-root>/.claude/docs/RULES-*.md
+    project_root = get_project_root()
+    if project_root:
+        project_rules_dir = project_root / '.claude' / 'docs'
+        if project_rules_dir.exists():
+            for f in project_rules_dir.glob('RULES-*.md'):
+                files.append(f)
+
+    return files
 
 
 def parse_rules_file(file_path: str) -> List[Dict]:
@@ -150,10 +189,15 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 示例:
-  %(prog)s --query review                    # 查询 review 场景规则
+  %(prog)s --query review                    # 查询 review 场景规则 (加载所有规则文件)
   %(prog)s --query postmortem --category security  # 查询安全类规则
   %(prog)s --query review --format json      # JSON 格式输出
   %(prog)s --query review --format markdown  # Markdown checklist 输出
+  %(prog)s -r docs/RULES-ANDROID.md --query review  # 仅加载指定规则文件
+
+默认加载:
+  - docs/RULES-*.md (框架内置规则)
+  - <project-root>/.claude/docs/RULES-*.md (项目自定义规则，可选)
 '''
     )
 
@@ -179,26 +223,38 @@ def main():
 
     parser.add_argument(
         '--rules-file', '-r',
-        default='docs/RULES-CODE-QUALITY.md',
-        help='规则文件路径 (default: docs/RULES-CODE-QUALITY.md)'
+        action='append',
+        dest='rules_files',
+        help='规则文件路径，可多次指定。未指定时自动发现所有规则文件'
     )
 
     args = parser.parse_args()
 
-    # 查找规则文件
-    rules_file = Path(args.rules_file)
-    if not rules_file.exists():
-        # 尝试从脚本所在目录的上级查找
-        script_dir = Path(__file__).parent.parent
-        rules_file = script_dir / args.rules_file
+    script_dir = Path(__file__).parent
+    all_rules = []
 
-    if not rules_file.exists():
-        print(f"Error: Rules file not found: {args.rules_file}", file=sys.stderr)
-        sys.exit(1)
+    if args.rules_files:
+        # 用户指定了规则文件
+        for rf in args.rules_files:
+            rules_file = Path(rf)
+            if not rules_file.exists():
+                # 尝试从脚本所在目录的上级查找
+                rules_file = script_dir.parent / rf
+            if not rules_file.exists():
+                print(f"Error: Rules file not found: {rf}", file=sys.stderr)
+                sys.exit(1)
+            all_rules.extend(parse_rules_file(str(rules_file)))
+    else:
+        # 自动发现所有规则文件
+        discovered = discover_rules_files(script_dir)
+        if not discovered:
+            print("Error: No rules files found", file=sys.stderr)
+            sys.exit(1)
+        for rules_file in discovered:
+            all_rules.extend(parse_rules_file(str(rules_file)))
 
-    # 加载和过滤规则
-    rules = parse_rules_file(str(rules_file))
-    filtered = filter_rules(rules, args.query, args.category)
+    # 过滤规则
+    filtered = filter_rules(all_rules, args.query, args.category)
 
     # 格式化输出
     if args.format == 'table':

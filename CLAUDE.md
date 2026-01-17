@@ -14,7 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 *   **Skills (`skills/`)**: AI 能力单元。每个目录（如 `postmortem`, `review`）包含 `SKILL.md`，定义工作流、Prompt 模板和执行步骤。
 *   **规范文档 (`docs/`)**:
     *   `META-SCHEMA.md`: **元数据标准**。所有 AI 生成文档必须严格遵守此 Schema，以支持语义检索。
-    *   `RULES-CODE-QUALITY.md`: **代码质量规则库**。包含可执行的 CLI 检查命令（`rg`, `ast-grep`）。
+    *   `RULES-CODE-QUALITY.md`: **通用代码质量规则库**。包含可执行的 CLI 检查命令（`rg`, `ast-grep`）。
+    *   `RULES-ANDROID.md`: **Android 代码质量规则库**。针对 Android 系统研发的性能和健壮性规则。
 *   **资产存储 (`<project-root>/.claude/`)**: 所有知识资产（复盘报告、审查记录等）均以 Markdown/JSON 形式本地存储于目标项目的 `<project-root>/.claude/` 目录下。
 
 ## 设计原则与约束
@@ -34,6 +35,12 @@ python scripts/rule_query.py --query review
 
 # 获取 Postmortem 场景的安全类规则
 python scripts/rule_query.py --query postmortem --category security
+
+# 获取 Android 性能规则
+python scripts/rule_query.py -r docs/RULES-ANDROID.md --query review --category performance
+
+# 获取 Android 健壮性规则 (内存泄漏、并发等)
+python scripts/rule_query.py -r docs/RULES-ANDROID.md --query postmortem --category robustness
 ```
 
 ### 知识库检索
