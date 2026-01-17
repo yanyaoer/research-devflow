@@ -237,8 +237,9 @@ rg "关键词" .claude/postmortem/  # 搜索历史问题
 | 文件 | 说明 |
 |------|------|
 | [docs/META-SCHEMA.md](docs/META-SCHEMA.md) | 统一文档元信息格式 |
-| [docs/RULES-CODE-QUALITY.md](docs/RULES-CODE-QUALITY.md) | 代码质量规则 (15 条，9 种语言) |
-| [scripts/rule_query.py](scripts/rule_query.py) | 规则查询工具 |
+| [docs/RULES-CODE-QUALITY.md](docs/RULES-CODE-QUALITY.md) | 通用代码质量规则 (16 条，9 种语言) |
+| [docs/RULES-ANDROID.md](docs/RULES-ANDROID.md) | Android 代码质量规则 (18 条，性能/健壮性) |
+| [scripts/rule_query.py](scripts/rule_query.py) | 规则查询工具 (支持自动发现多规则文件) |
 
 ## 依赖工具
 
