@@ -3,6 +3,106 @@ name: research
 description: "拆解复杂任务为可并行执行的子任务。使用场景：用户说'研究'、'调研'、'拆解任务'、'并行处理'，或需要将大任务分解为多个独立步骤。"
 ---
 
+```yaml:skill-config
+name: research
+version: "1.0"
+description: "拆解复杂任务为可并行执行的子任务"
+
+triggers:
+  commands: ["/research"]
+  keywords: ["研究", "调研", "拆解任务", "并行处理"]
+
+steps:
+  - id: analyze_task
+    name: "分析任务"
+    type: prompt
+    prompt_ref: "#analyze-task-prompt"
+    description: "分析任务，识别可并行的子任务"
+
+  - id: scan_postmortem
+    name: "扫描 Postmortem"
+    type: command
+    command: "fd REPORT.md .claude/postmortem/ 2>/dev/null || echo 'No postmortem found'"
+    description: "扫描相关历史问题报告"
+
+  - id: gate_create_dir
+    name: "[GATE-1] 创建任务目录"
+    type: gate_check
+    validation: "ls -la .claude/shared_files/${task_slug}/"
+    on_failure: abort
+    description: "确保任务目录已创建"
+
+  - id: gate_task_status
+    name: "[GATE-2] 创建 task-status.json"
+    type: gate_check
+    validation: "cat .claude/shared_files/${task_slug}/task-status.json | jq '.tasks | length'"
+    on_failure: abort
+    dependencies: [gate_create_dir]
+    description: "确保任务状态文件已创建"
+
+  - id: gate_context_common
+    name: "[GATE-3] 创建 context-common.md"
+    type: gate_check
+    validation: "head -20 .claude/shared_files/${task_slug}/context-common.md"
+    on_failure: abort
+    dependencies: [gate_task_status]
+    description: "确保公共上下文文件已创建"
+
+  - id: write_subtask_contexts
+    name: "写入子任务上下文"
+    type: prompt
+    prompt_ref: "#write-subtask-context-prompt"
+    dependencies: [gate_context_common]
+    description: "为每个子任务写入 context-pX-xxx.md"
+
+  - id: setup_worktrees
+    name: "创建 Git Worktree"
+    type: command
+    command: "./scripts/setup-worktrees.sh .claude/shared_files/${task_slug}"
+    dependencies: [write_subtask_contexts]
+    description: "为并行开发创建独立工作目录"
+    optional: true
+
+  - id: gate_execution_mode
+    name: "[GATE-4] 询问执行方式"
+    type: user_input
+    options:
+      - id: parallel
+        label: "Subagent 后台并行"
+        description: "无依赖的独立任务"
+      - id: manual
+        label: "多终端手动启动"
+        description: "需要 MCP 或交互"
+      - id: sequential
+        label: "当前进程顺序"
+        description: "简单任务或强依赖"
+    dependencies: [gate_context_common]
+    description: "确认用户选择的执行模式"
+
+  - id: execute_tasks
+    name: "执行子任务"
+    type: prompt
+    prompt_ref: "#execute-tasks-prompt"
+    dependencies: [gate_execution_mode]
+    description: "根据用户选择的模式执行子任务"
+
+  - id: merge_branches
+    name: "合并分支"
+    type: command
+    command: "./scripts/merge.sh .claude/shared_files/${task_slug}"
+    dependencies: [execute_tasks]
+    description: "合并所有完成的分支"
+    optional: true
+
+  - id: cleanup
+    name: "清理 Worktree"
+    type: command
+    command: "git worktree prune"
+    dependencies: [merge_branches]
+    description: "清理已完成的工作目录"
+    optional: true
+```
+
 # Research - 复杂任务拆解与并行处理
 
 ## 快速开始
@@ -329,4 +429,86 @@ osascript -e 'display notification "P0: <任务名> 已完成" with title "Resea
 # 合并所有完成的分支（所有任务完成后执行）
 ./scripts/merge.sh .claude/shared_files/<yymmdd-task-slug>
 ./scripts/merge.sh .claude/shared_files/<yymmdd-task-slug> --dry-run  # 预览
+```
+
+---
+
+## Prompts
+
+```markdown:analyze-task-prompt
+你是一个任务分析专家。请分析以下任务，并识别可并行执行的子任务。
+
+**用户任务**: ${task}
+
+**分析要求**:
+1. 识别任务的核心目标
+2. 拆解为 2-5 个可独立执行的子任务
+3. 分析子任务之间的依赖关系
+4. 判断任务类型（调研型/开发型/混合型）
+
+**输出格式**:
+1. 任务类型: [research/development/mixed]
+2. 是否需要 worktree: [是/否]
+3. 子任务列表:
+   - p0: [名称] - [简述] - 依赖: [无/p1,p2...]
+   - p1: [名称] - [简述] - 依赖: [无/p0,p2...]
+   ...
+
+请基于分析创建:
+1. 任务目录: .claude/shared_files/${task_slug}/
+2. task-status.json 文件
+3. context-common.md 文件
+```
+
+```markdown:write-subtask-context-prompt
+基于已创建的 task-status.json，为每个子任务写入详细的上下文文件。
+
+**任务信息**:
+- task_slug: ${task_slug}
+- 子任务列表: 从 .claude/shared_files/${task_slug}/task-status.json 读取
+
+**每个 context-pX-xxx.md 必须包含**:
+
+1. **任务目标**: 明确的完成目标
+2. **依赖任务**: 列出依赖的其他子任务（如有）
+3. **实现步骤**:
+   - 详细的代码示例
+   - 具体的文件修改
+4. **涉及文件清单**: 需要创建或修改的文件
+5. **验证方法**: 可执行的验证命令
+6. **完成标准**: checklist 格式
+
+**注意**:
+- 上下文应足够详细，执行者无需额外探索
+- 包含相关的代码片段和模板
+- 引用 context-common.md 中的公共信息
+```
+
+```markdown:execute-tasks-prompt
+根据用户选择的执行模式，开始执行子任务。
+
+**执行模式**: ${execution_mode}
+**任务目录**: .claude/shared_files/${task_slug}/
+
+**执行要求**:
+
+如果是 **parallel** (Subagent 后台并行):
+1. 为每个无依赖的子任务启动 Task agent
+2. 传入对应的 context-pX-xxx.md 作为上下文
+3. 设置 run_in_background: true
+4. 定期检查任务状态
+
+如果是 **sequential** (顺序执行):
+1. 按依赖顺序逐个执行子任务
+2. 每个子任务完成后更新 task-status.json
+3. 发送系统通知
+
+如果是 **manual** (多终端手动启动):
+1. 输出每个子任务的启动命令
+2. 等待用户手动执行
+3. 提供状态检查命令
+
+**完成后**:
+1. 更新 task-status.json 中的状态
+2. 发送完成通知: osascript -e 'display notification "任务完成" with title "Research"'
 ```

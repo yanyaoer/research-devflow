@@ -1,0 +1,84 @@
+# DevFlow LLM Provider Configuration
+# ====================================
+#
+# Copy this file to ~/.config/devflow/config.yml
+#
+# Priority order for each setting:
+#   1. Command line arguments (highest priority)
+#   2. Config file (~/.config/devflow/config.yml)
+#   3. Environment variables (lowest priority)
+#
+# Environment variables fallback:
+#   - OPENAI_API_KEY, OPENAI_BASE_URL
+#   - ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL
+#   - GOOGLE_API_KEY
+
+providers:
+  # ============================================
+  # OpenAI / OpenAI-compatible API
+  # ============================================
+  openai:
+    # API key (required)
+    api_key: "sk-your-openai-api-key"
+
+    # Custom endpoint for OpenAI-compatible APIs (optional)
+    # Examples:
+    #   - Azure OpenAI: https://your-resource.openai.azure.com/
+    #   - Local LLM: http://localhost:8080/v1
+    #   - Proxy: https://your-proxy.example.com/v1
+    # base_url: "https://api.openai.com/v1"
+
+    # Default model (optional, defaults to gpt-4o)
+    model: "gpt-4o"
+
+    # Custom HTTP headers (optional)
+    # Useful for proxy authentication, Azure API version, etc.
+    # extra_headers:
+    #   api-version: "2024-02-15-preview"  # Azure
+    #   X-Proxy-Auth: "your-auth-token"
+
+  # ============================================
+  # Anthropic Claude API
+  # ============================================
+  anthropic:
+    api_key: "sk-ant-your-anthropic-api-key"
+
+    # Custom endpoint (optional)
+    # base_url: "https://api.anthropic.com"
+
+    # Default model (optional, defaults to claude-sonnet-4-20250514)
+    model: "claude-sonnet-4-20250514"
+
+    # Custom headers (optional)
+    # extra_headers:
+    #   anthropic-beta: "messages-2024-01-01"
+
+  # ============================================
+  # Google Gemini API
+  # ============================================
+  gemini:
+    api_key: "your-google-api-key"
+
+    # Default model (optional, defaults to gemini-2.0-flash)
+    model: "gemini-2.0-flash"
+
+    # Custom headers (optional)
+    # extra_headers:
+    #   X-Goog-Custom: "value"
+
+# ============================================
+# Usage Examples
+# ============================================
+#
+# 1. Basic usage with config file:
+#    uv run scripts/skill-runner.py run research "task"
+#
+# 2. Override provider via CLI:
+#    uv run scripts/skill-runner.py run research --provider openai "task"
+#
+# 3. Override model via CLI:
+#    uv run scripts/skill-runner.py run research --model gpt-4-turbo "task"
+#
+# 4. Use environment variables instead:
+#    export OPENAI_API_KEY="sk-..."
+#    uv run scripts/skill-runner.py run research "task"

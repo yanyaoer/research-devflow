@@ -1,3 +1,60 @@
+---
+name: review
+description: "代码审查辅助工具，实现事前代码质量检查，与 postmortem 联动。"
+---
+
+```yaml:skill-config
+name: review
+version: "1.0"
+description: "代码审查辅助工具"
+
+triggers:
+  commands: ["/review"]
+  keywords: ["审查", "review", "检查代码", "代码审查"]
+
+steps:
+  - id: get_changes
+    name: "获取变更文件"
+    type: command
+    command: "git diff --cached --name-only"
+    description: "获取暂存区变更文件列表"
+
+  - id: load_rules
+    name: "加载审查规则"
+    type: command
+    command: "python scripts/rule_query.py --query review --format json 2>/dev/null || echo '[]'"
+    description: "加载适用的代码质量规则"
+
+  - id: search_postmortem
+    name: "检索相关 Postmortem"
+    type: command
+    command: "fd REPORT.md .claude/postmortem/ 2>/dev/null || echo 'No postmortem'"
+    description: "检索与变更相关的历史问题"
+
+  - id: analyze_code
+    name: "分析代码变更"
+    type: prompt
+    prompt_ref: "#analyze-code-prompt"
+    dependencies: [get_changes, load_rules, search_postmortem]
+    description: "逐文件分析代码质量问题"
+
+  - id: generate_report
+    name: "生成审查报告"
+    type: prompt
+    prompt_ref: "#generate-report-prompt"
+    dependencies: [analyze_code]
+    description: "生成结构化审查报告"
+
+  - id: gate_critical_issues
+    name: "[GATE] 检查 Critical 问题"
+    type: gate_check
+    validation: "echo 'Review completed - check report for critical issues'"
+    on_failure: skip
+    dependencies: [generate_report]
+    description: "提示用户检查报告中的 Critical 问题"
+    optional: true
+```
+
 # Review Skill
 
 代码审查辅助工具，实现事前代码质量检查，与 postmortem 联动。
@@ -219,3 +276,77 @@ issues_count: 3
 例如：
 - `<project-root>/.claude/reviews/250113-review-pr-123/REPORT.md`
 - `<project-root>/.claude/reviews/250113-review-feature-auth/REPORT.md`
+
+---
+
+## Prompts
+
+```markdown:analyze-code-prompt
+你是一个代码审查专家。请分析以下代码变更。
+
+**变更文件列表**:
+${changed_files}
+
+**适用规则**:
+${rules}
+
+**相关历史问题**:
+${postmortem_refs}
+
+**分析要求**:
+1. 逐文件检查，应用适用规则
+2. 使用 LSP 工具追踪调用关系（至少上下游各 2 层）
+3. 对照历史问题，检查是否有类似风险
+
+**对每个问题记录**:
+- 规则 ID
+- 文件:行号
+- 问题代码片段
+- 风险等级 (critical/high/medium/low)
+- 建议修复
+
+将分析结果存储到 context 变量 ${analysis_results} 中。
+```
+
+```markdown:generate-report-prompt
+基于代码分析结果，生成结构化审查报告。
+
+**分析结果**: ${analysis_results}
+**变更文件**: ${changed_files}
+**项目根目录**: ${project_root}
+
+**报告格式要求**:
+
+1. YAML Frontmatter:
+   ```yaml
+   ---
+   type: review
+   id: "${task_slug}"
+   created_at: "${date}"
+   status: active
+   scope:
+     files: [变更文件列表]
+     functions: [涉及函数]
+   keywords: [关键词]
+   risk_level: [最高风险等级]
+   issues_count: [问题总数]
+   ---
+   ```
+
+2. 报告内容:
+   - 变更概览表格
+   - 按风险等级分类的问题列表
+   - 相关 Postmortem 引用
+   - 风险摘要
+
+**输出位置**:
+${project_root}/.claude/reviews/${task_slug}/REPORT.md
+
+**执行要求**:
+1. 生成完整的 Markdown 报告内容
+2. **必须**使用 `write_file` 工具将报告写入上述输出位置
+3. 统计 critical 和 high 问题数量
+
+**可用工具**:
+- `write_file(file_path, content)`: 写入文件，自动创建父目录
+```
